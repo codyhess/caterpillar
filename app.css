@@ -9,18 +9,17 @@ body {
   margin: 0;
   font-family: ShortStack, sans-serif;
   width: 40em;
+  text-align: center;
 }
 canvas {
   background-color: #EEE;
   width: 100%;
 }
-h1, h2, #mobile-controls {
-  text-align: center;
-}
 
 @media (max-width: 641px) {
   body { font-size: 16px; }
   #desktop-controls { display: none; }
+  #dpad { width: 300px; }
 }
 @media (min-width: 641px) {
   body {

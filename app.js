@@ -16,16 +16,21 @@ a.g.down = false;
 
 a.canvas = undefined;
 a.context = undefined;
+a.controls = undefined;
 
 document.addEventListener('DOMContentLoaded', function() {
-  // set up canvas
+  // bind elements
+  a.controls = document.getElementById('mobile-controls');
   a.canvas = document.getElementById('canvas');
+
+  // set up canvas
   a.context = a.canvas.getContext('2d');
   a.context.fillStyle = "green";
 
-  // listen for keypresses
+  // listen for events
   window.addEventListener('keydown', a.l.onKeyDown);
   a.canvas.addEventListener('touchstart', a.l.onTouchCanvas);
+  a.controls.addEventListener('touchstart', a.l.onTouchControls);
 
   // start it up
   window.setInterval(a.g.loop, 100);
@@ -42,6 +47,23 @@ a.l.onKeyDown = function(event) {
 }
 a.l.onTouchCanvas = function(event) {
   a.h.pause();
+}
+a.l.onTouchControls = function(event) {
+  var x = event.touches[0].pageX;
+  var y = event.touches[0].pageY;
+  var l = 0; var r = w = 640;
+  var u = a.controls.getClientRects()[0].top;
+  var d = a.controls.getClientRects()[0].bottom;
+  var h = d - u;
+  var deltaX = x - w/2;
+  var deltaY = (y - u) - h/2;
+  if (Math.abs(deltaX) > Math.abs(deltaY)) {
+    if (deltaX > 0) { a.h.changeDir('right'); }
+    else { a.h.changeDir('left'); }
+  } else {
+    if (deltaY > 0) { a.h.changeDir('down'); }
+    else { a.h.changeDir('up'); }
+  }
 }
 
 // HANDLER FUNCTIONS

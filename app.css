@@ -14,30 +14,29 @@ canvas {
   background-color: #EEE;
   width: 100%;
 }
-h1, h2 {
+h1, h2, #mobile-controls {
   text-align: center;
 }
 
 @media (max-width: 641px) {
   body { font-size: 16px; }
   #desktop-controls { display: none; }
-  #arrows {
-    display: table-row;
-    height: auto;
+  input {
+    font-size: 3rem;
+    font-family: ShortStack, sans-serif;
   }
   #left {
-    left: 20px;
+    position: relative;
+    left: 10px;
   }
   #right {
-    right: 20px;
-  }
-  #up {
-    position: absolute;
-    top: 20px;
+    position: relative;
+    right: 1%;
   }
   #down {
-    position: absolute;
-    bottom: 20px;
+    float: right;
+    margin-right: 50%;
+    top: 50%;
   }
 }
 @media (min-width: 641px) {

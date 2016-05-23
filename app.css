@@ -21,23 +21,6 @@ h1, h2, #mobile-controls {
 @media (max-width: 641px) {
   body { font-size: 16px; }
   #desktop-controls { display: none; }
-  input {
-    font-size: 3rem;
-    font-family: ShortStack, sans-serif;
-  }
-  #left {
-    position: relative;
-    left: 10px;
-  }
-  #right {
-    position: relative;
-    right: 1%;
-  }
-  #down {
-    float: right;
-    margin-right: 50%;
-    top: 50%;
-  }
 }
 @media (min-width: 641px) {
   body {

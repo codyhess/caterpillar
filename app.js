@@ -14,9 +14,6 @@ a.g.right = true; // moves right at the start
 a.g.up = false;
 a.g.down = false;
 
-a.touchState = a.t = {};
-a.t.startX = a.t.endX = a.t.startY = a.t.endY = undefined;
-
 a.canvas = undefined;
 a.context = undefined;
 
@@ -28,8 +25,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // listen for keypresses
   window.addEventListener('keydown', a.l.onKeyDown);
-  window.addEventListener('touchstart', a.l.onTouchStart);
-  window.addEventListener('touchend', a.l.onTouchEnd);
+  a.canvas.addEventListener('touchstart', a.l.onTouchCanvas);
 
   // start it up
   window.setInterval(a.g.loop, 100);
@@ -44,22 +40,8 @@ a.l.onKeyDown = function(event) {
   else if (k === 38 || k === 87) { a.h.changeDir('up'); }
   else if (k === 40 || k === 83) { a.h.changeDir('down'); }
 }
-a.l.onTouchStart = function(event) {
-  a.t.startX = event.touches[0].pageX;
-  a.t.startY = event.touches[0].pageY;
-}
-a.l.onTouchEnd = function(event) {
-  a.t.endX = event.changedTouches[0].pageX;
-  a.t.endY = event.changedTouches[0].pageY;
-  var deltaX = a.t.endX - a.t.startX;
-  var deltaY = a.t.endY - a.t.startY;
-  console.log(deltaX);
-
-  if (deltaX > 20) { a.h.changeDir('right'); }
-  else if (deltaX < -20) { a.h.changeDir('left'); }
-  else if (deltaY > 20) { a.h.changeDir('down'); }
-  else if (deltaY < -20) { a.h.changeDir('up'); }
-  else { a.h.pause(); }
+a.l.onTouchCanvas = function(event) {
+  a.h.pause();
 }
 
 // HANDLER FUNCTIONS

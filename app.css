@@ -2,17 +2,49 @@
   font-family: "ShortStack";
   src: url("/font/ShortStack-Regular.otf");
 }
+
 body {
   background-color: lightgreen;
   padding: 0;
   margin: 0;
   font-family: ShortStack, sans-serif;
-  font-size: 16px;
+  width: 40em;
+}
+canvas {
+  background-color: #EEE;
+  width: 100%;
 }
 h1, h2 {
   text-align: center;
 }
-canvas {
-  background-color: #EEE;
-  width: 100vw;
+
+@media (max-width: 641px) {
+  body { font-size: 16px; }
+  #desktop-controls { display: none; }
+  #arrows {
+    display: table-row;
+    height: auto;
+  }
+  #left {
+    left: 20px;
+  }
+  #right {
+    right: 20px;
+  }
+  #up {
+    position: absolute;
+    top: 20px;
+  }
+  #down {
+    position: absolute;
+    bottom: 20px;
+  }
+}
+@media (min-width: 641px) {
+  body {
+    font-size: 24px;
+    margin: 0 auto;
+  }
+  h1 { margin: 5px; }
+  #mobile-controls { display: none; }
 }

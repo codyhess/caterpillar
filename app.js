@@ -186,5 +186,5 @@ a.g.drawLose = function() {
   if (!a.g.lose) { return; }
   a.context.font = "5rem ShortStack";
   a.context.fillText('Game Over',100,100,440);
-  a.context.fillText(a.g.caterpillar.length,300,200,440);
+  a.context.fillText(a.g.caterpillar.length,270,200,440);
 }

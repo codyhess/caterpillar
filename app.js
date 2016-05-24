@@ -10,25 +10,8 @@ a.game = a.g = {};
 
 a.g.width = a.g.w = 640;
 a.g.height = a.g.h = 480;
-
-a.g.caterpillar = [[80,20],[60,20],[40,20],[20,20]];
-a.g.leafX = 300
-a.g.leafY = 200;
-
-a.g.x = 80;
-a.g.y = 20;
 a.g.scale = a.g.s = 20;
-
 a.g.pause = true;
-
-a.g.left = false;
-a.g.right = true; // moves right at the start
-a.g.up = false;
-a.g.down = false;
-
-a.g.lose = false;
-
-a.g.intervalID = undefined;
 
 document.addEventListener('DOMContentLoaded', function() {
   // bind elements
@@ -147,7 +130,23 @@ a.g.spawnLeaf = function() {
 }
 
 a.g.startGame = function() {
+  a.g.initialize();
   a.g.intervalID = window.setInterval(a.g.loop, 100);
+}
+a.g.initialize = function() {
+  a.g.caterpillar = [[80,20],[60,20],[40,20],[20,20]];
+  a.g.leafX = 300
+  a.g.leafY = 200;
+
+  a.g.x = 80;
+  a.g.y = 20;
+
+  a.g.left = false;
+  a.g.right = true; // moves right at the start
+  a.g.up = false;
+  a.g.down = false;
+
+  a.g.lose = false;
 }
 a.g.gameOver = function() {
   var c = a.g.caterpillar.slice(1);

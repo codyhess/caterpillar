@@ -18,11 +18,17 @@ a.g.leafY = 200;
 a.g.x = 80;
 a.g.y = 20;
 a.g.scale = a.g.s = 20;
+
 a.g.pause = true;
+
 a.g.left = false;
 a.g.right = true; // moves right at the start
 a.g.up = false;
 a.g.down = false;
+
+a.g.lose = false;
+
+a.g.intervalID = undefined;
 
 document.addEventListener('DOMContentLoaded', function() {
   // bind elements
@@ -38,7 +44,7 @@ document.addEventListener('DOMContentLoaded', function() {
   a.controls.addEventListener('touchstart', a.l.onTouchControls);
 
   // start it up
-  window.setInterval(a.g.loop, 100);
+  a.g.startGame();
 });
 
 // LISTENER FUNCTIONS
@@ -85,7 +91,8 @@ a.h.changeDir = function(direction) {
   else if (d === 'down') { a.g.down = true; }
 }
 a.h.pause = function() {
-  if (a.g.pause === true) { a.g.pause = false; }
+  if (a.g.intervalID === undefined) { a.g.startGame(); }
+  else if (a.g.pause === true) { a.g.pause = false; }
   else { a.g.pause = true; }
 }
 
@@ -109,6 +116,9 @@ a.g.loop = function() {
   else if (a.g.y >= a.g.h) { a.g.y = 0; }
   else if (a.g.y < 0) { a.g.y = a.g.h-a.g.s; }
 
+  // doneskis
+  a.g.gameOver();
+
   // eat it
   a.g.eatLeaf();
 
@@ -118,13 +128,13 @@ a.g.loop = function() {
 
 a.g.eatLeaf = function() {
   if (a.g.x === a.g.leafX && a.g.y === a.g.leafY) {
-    var headX = a.g.leafX;
-    var headY = a.g.leafY;
-    if (a.g.left) { headX -= a.g.s; }
-    else if (a.g.right) { headX += a.g.s; }
-    else if (a.g.up) { headY -= a.g.s; }
-    else if (a.g.down) { headY += a.g.s; }
-    a.g.caterpillar.unshift([headX,headY]);
+    var lastX = a.g.caterpillar[a.g.caterpillar.length-1][0];
+    var lastY = a.g.caterpillar[a.g.caterpillar.length-1][1];
+    var penultimateX = a.g.caterpillar[a.g.caterpillar.length-2][0];
+    var penultimateY = a.g.caterpillar[a.g.caterpillar.length-2][1];
+    var tailX = lastX - (penultimateX-lastX);
+    var tailY = lastY - (penultimateY-lastY);
+    a.g.caterpillar.push([lastX,lastY]);
     a.g.leafX = undefined;
     a.g.leafY = undefined;
     a.g.spawnLeaf();
@@ -134,7 +144,25 @@ a.g.eatLeaf = function() {
 a.g.spawnLeaf = function() {
   a.g.leafX = Math.random()*a.g.w; a.g.leafX -= a.g.leafX % a.g.s;
   a.g.leafY = Math.random()*a.g.h; a.g.leafY -= a.g.leafY % a.g.s;
-  return;
+}
+
+a.g.startGame = function() {
+  a.g.intervalID = window.setInterval(a.g.loop, 100);
+}
+a.g.gameOver = function() {
+  var c = a.g.caterpillar.slice(1);
+  var headX = a.g.caterpillar[0][0];
+  var headY = a.g.caterpillar[0][1];
+  for (var i of c) {
+    if (i[0] === headX && i[1] === headY) {
+      window.clearInterval(a.g.intervalID);
+      a.g.intervalID = undefined;
+      a.g.lose = true;
+      a.context.font = "5rem ShortStack";
+      a.context.fillText('Game Over',100,100,440);
+      a.context.fillText(a.g.caterpillar.length,300,200,440);
+    }
+  }
 }
 
 a.g.drawGame = function() {
@@ -144,12 +172,13 @@ a.g.drawGame = function() {
 a.g.drawCaterpillar = function() {
   a.g.caterpillar.pop();
   a.g.caterpillar.unshift([a.g.x,a.g.y]);
-  a.context.fillStyle = "green";
+  a.context.fillStyle = 'green';
+  if (a.g.lose) { a.context.fillStyle = 'red'; }
   for (var i of a.g.caterpillar) {
     a.context.fillRect(i[0],i[1],a.g.s,a.g.s);
   }
 }
 a.g.drawLeaf = function() {
-  a.context.fillStyle = "black";
+  a.context.fillStyle = 'black';
   a.context.fillRect(a.g.leafX,a.g.leafY,a.g.s,a.g.s);
 }

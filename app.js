@@ -2,8 +2,18 @@ var app = a = {};
 a.listeners = a.l = {};
 a.handlers = a.h = {};
 
+a.canvas = undefined;
+a.context = undefined;
+a.controls = undefined;
+
 a.game = a.g = {};
+
+a.g.width = a.g.w = 640;
+a.g.height = a.g.h = 480;
+
 a.g.caterpillar = [[80,20],[60,20],[40,20],[20,20]];
+a.g.leafX = 300
+a.g.leafY = 200;
 
 a.g.x = 80;
 a.g.y = 20;
@@ -14,10 +24,6 @@ a.g.right = true; // moves right at the start
 a.g.up = false;
 a.g.down = false;
 
-a.canvas = undefined;
-a.context = undefined;
-a.controls = undefined;
-
 document.addEventListener('DOMContentLoaded', function() {
   // bind elements
   a.controls = document.getElementById('mobile-controls');
@@ -25,7 +31,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // set up canvas
   a.context = a.canvas.getContext('2d');
-  a.context.fillStyle = "green";
 
   // listen for events
   window.addEventListener('keydown', a.l.onKeyDown);
@@ -86,36 +91,65 @@ a.h.pause = function() {
 
 // GAME FUNCTIONS
 a.g.loop = function() {
-  var s = 20; // scale
-  var w = 640 // width
-  var h = 480; // height
-
   // do nothing if paused
   if (a.g.pause === true) { return; }
 
   // clear it off
-  a.context.clearRect(0,0,w,h);
+  a.context.clearRect(0,0,a.g.w,a.g.h);
 
   // move it
-  if (a.g.right) { a.g.x += 20; }
+  if (a.g.right) { a.g.x += a.g.s; }
   else if (a.g.left) { a.g.x -= 20; }
-  else if (a.g.up) { a.g.y -= 20; }
-  else if (a.g.down) { a.g.y += 20; }
+  else if (a.g.up) { a.g.y -= a.g.s; }
+  else if (a.g.down) { a.g.y += a.g.s; }
 
   // check it
-  if (a.g.x >= w) { a.g.x = 0; }
-  else if (a.g.x < 0) { a.g.x = w-s; }
-  else if (a.g.y >= h) { a.g.y = 0; }
-  else if (a.g.y < 0) { a.g.y = h-s; }
+  if (a.g.x >= a.g.w) { a.g.x = 0; }
+  else if (a.g.x < 0) { a.g.x = a.g.w-a.g.s; }
+  else if (a.g.y >= a.g.h) { a.g.y = 0; }
+  else if (a.g.y < 0) { a.g.y = a.g.h-a.g.s; }
+
+  // eat it
+  a.g.eatLeaf();
 
   // draw it
-  a.g.drawCaterpillar();
+  a.g.drawGame();
 }
 
+a.g.eatLeaf = function() {
+  if (a.g.x === a.g.leafX && a.g.y === a.g.leafY) {
+    var headX = a.g.leafX;
+    var headY = a.g.leafY;
+    if (a.g.left) { headX -= a.g.s; }
+    else if (a.g.right) { headX += a.g.s; }
+    else if (a.g.up) { headY -= a.g.s; }
+    else if (a.g.down) { headY += a.g.s; }
+    a.g.caterpillar.unshift([headX,headY]);
+    a.g.leafX = undefined;
+    a.g.leafY = undefined;
+    a.g.spawnLeaf();
+  }
+  return;
+}
+a.g.spawnLeaf = function() {
+  a.g.leafX = Math.random()*a.g.w; a.g.leafX -= a.g.leafX % a.g.s;
+  a.g.leafY = Math.random()*a.g.h; a.g.leafY -= a.g.leafY % a.g.s;
+  return;
+}
+
+a.g.drawGame = function() {
+  a.g.drawCaterpillar();
+  a.g.drawLeaf();
+}
 a.g.drawCaterpillar = function() {
   a.g.caterpillar.pop();
   a.g.caterpillar.unshift([a.g.x,a.g.y]);
+  a.context.fillStyle = "green";
   for (var i of a.g.caterpillar) {
     a.context.fillRect(i[0],i[1],a.g.s,a.g.s);
   }
+}
+a.g.drawLeaf = function() {
+  a.context.fillStyle = "black";
+  a.context.fillRect(a.g.leafX,a.g.leafY,a.g.s,a.g.s);
 }

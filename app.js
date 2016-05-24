@@ -64,7 +64,8 @@ a.l.onTouchControls = function(event) {
 a.h.changeDir = function(direction) {
   var d = direction;
   if (d === 'left' && a.g.right || d === 'right' && a.g.left ||
-      d === 'up' && a.g.down || d === 'down' && a.g.up) {
+      d === 'up' && a.g.down || d === 'down' && a.g.up ||
+      a.g.turned) {
     return;
   }
   a.g.left = a.g.right = a.g.up = a.g.down = false;
@@ -72,6 +73,7 @@ a.h.changeDir = function(direction) {
   else if (d === 'left') { a.g.left = true; }
   else if (d === 'up') { a.g.up = true; }
   else if (d === 'down') { a.g.down = true; }
+  a.g.turned = true;
 }
 a.h.pause = function() {
   if (a.g.intervalID === undefined) { a.g.startGame(); }
@@ -92,6 +94,7 @@ a.g.loop = function() {
   else if (a.g.left) { a.g.x -= 20; }
   else if (a.g.up) { a.g.y -= a.g.s; }
   else if (a.g.down) { a.g.y += a.g.s; }
+  a.g.turned = false;
 
   // check it
   if (a.g.x >= a.g.w) { a.g.x = 0; }

@@ -157,9 +157,6 @@ a.g.gameOver = function() {
       window.clearInterval(a.g.intervalID);
       a.g.intervalID = undefined;
       a.g.lose = true;
-      a.context.font = "5rem ShortStack";
-      a.context.fillText('Game Over',100,100,440);
-      a.context.fillText(a.g.caterpillar.length,300,200,440);
     }
   }
 }
@@ -167,6 +164,7 @@ a.g.gameOver = function() {
 a.g.drawGame = function() {
   a.g.drawCaterpillar();
   a.g.drawLeaf();
+  a.g.drawLose();
 }
 a.g.drawCaterpillar = function() {
   a.g.caterpillar.pop();
@@ -180,4 +178,10 @@ a.g.drawCaterpillar = function() {
 a.g.drawLeaf = function() {
   a.context.fillStyle = 'black';
   a.context.fillRect(a.g.leafX,a.g.leafY,a.g.s,a.g.s);
+}
+a.g.drawLose = function() {
+  if (!a.g.lose) { return; }
+  a.context.font = "5rem ShortStack";
+  a.context.fillText('Game Over',100,100,440);
+  a.context.fillText(a.g.caterpillar.length,300,200,440);
 }
